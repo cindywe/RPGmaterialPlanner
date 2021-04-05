@@ -1,29 +1,39 @@
 % Stages and Careers aviable in our make-up RPG
-% upgrade(material (M, S, A), career) is true if it represent the required material of each kinds X, Y, Z to upgrade this career.
-upgrade(career(knight),material(type(magic),4),material(type(shield),8),material(type(attack),8)).
-upgrade(career(fighter),material(type(magic),4),material(type(shield),4),material(type(attack),12)).
-upgrade(career(mage),material(type(magic),14),material(type(shield),2),material(type(attack),4)).
-% career(inputcareer) is true when the input career is a valid career
 
-% stage(number, M, S, A) 
-stage(1,1,1,1). % one-index
-stage(2,material(type(magic),0),material(type(shield),1),material(type(attack),2)).
-stage(3,1,0,1). %--todo
-stage(4,1,1,2). %--todo
-stage(5,2,2,0). %--todo
-stage(6,3,0,1). %--todo
-% material(num, type) is true if num >= 0 and type is valid
+% upgrade(C, M) is true if M are materials for upgrading to career C
+upgrade(career(knight), [material(type(magic),4), material(type(shield),8), material(type(attack),8)]).
+upgrade(career(fighter), [material(type(magic),4), material(type(shield),4), material(type(attack),12)]).
+upgrade(career(mage), [material(type(magic),14), material(type(shield),2), material(type(attack),4)]).
 
+
+% stage(N, M) is true if M are materials earned from stage N
+stage(1, [material(type(magic),1), material(type(shield),1), material(type(attack),1)]).
+stage(2, [material(type(magic),0), material(type(shield),1), material(type(attack),2)]).
+stage(3, [material(type(magic),1), material(type(shield),0), material(type(attack),1)]).
+stage(4, [material(type(magic),1), material(type(shield),1), material(type(attack),2)]).
+stage(5, [material(type(magic),2), material(type(shield),2), material(type(attack),0)]).
+stage(6, [material(type(magic),3), material(type(shield),0), material(type(attack),1)]).
+
+
+% material(T, N) is true if N >= 0 and T is a valid material type;
+material(T, N) :-
+	N >= 0,
+	type(T).
+
+% type(T) is true when T is a valid material type
 type(magic).
 type(shield).
 type(attack).
+
+% career(C) is true when C is a valid career
 career(knight).
 career(mage).
 career(fighter).
 
+
+
+
+
+% todo
 myconstraint(time).
 myconstraint(difficulties).
-
-
-
-
