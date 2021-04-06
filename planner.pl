@@ -1,24 +1,8 @@
 :- include("facts.pl").
 
 
-ask :-
-    write("What is the career you want to upgrade to? "), flush_output(current_output),
-    nl,
-    readln(Q),
-    question(Q, Ans),
-    write("You need: "),
-	write(Ans).
-
-
-% ----- Test cases -----
-% ?- ask.
-% What is the career you want to upgrade to? 
-% |: mage
-% You need: [Magic = 14,Shield = 2,Attack = 4]
-
-
 ask(Ans) :-
-    write("Ask your question below: "), flush_output(current_output),
+    write("Tell me which career you want to upgrade to OR ask your question: "), flush_output(current_output),
     nl,
     readln(Q),
     question(Q, Ans).
@@ -39,6 +23,7 @@ ask(Ans) :-
 
 % ------------ QUESTIONS ------------- %
 question([X], Ans) :-
+	write("You need these for upgrading: "),
 	requires_for_upgrading(X, Ans).
 
 question(['What',materials,required,for,upgrading,to,X,?], Ans) :-
@@ -47,6 +32,7 @@ question(['What',materials,required,for,upgrading,to,X,?], Ans) :-
 
 question(['How',many,Y,required,for,upgrading,to,X,?], Ans) :-
 	material_for_upgrade(career(X), material(type(Y), Ans)).
+
 
 
 % ------------ LOGICS ------------- %
