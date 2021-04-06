@@ -6,6 +6,17 @@ upgrade(career(fighter), [material(type(magic),4), material(type(shield),4), mat
 upgrade(career(mage), [material(type(magic),14), material(type(shield),2), material(type(attack),4)]).
 
 
+material_for_upgrade(career(knight), material(type(magic),4)).
+material_for_upgrade(career(knight), material(type(shield),8)).
+material_for_upgrade(career(knight), material(type(attack),8)).
+material_for_upgrade(career(fighter), material(type(magic),4)).
+material_for_upgrade(career(fighter), material(type(shield),4)).
+material_for_upgrade(career(fighter), material(type(attack),12)).
+material_for_upgrade(career(mage), material(type(magic),14)).
+material_for_upgrade(career(mage), material(type(shield),2)).
+material_for_upgrade(career(mage), material(type(attack),4)).
+
+
 % stage(N, M) is true if M are materials earned from stage N
 stage(1, [material(type(magic),1), material(type(shield),1), material(type(attack),1)]).
 stage(2, [material(type(magic),0), material(type(shield),1), material(type(attack),2)]).
