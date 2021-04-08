@@ -1,4 +1,3 @@
-% Stages and Careers aviable in our make-up RPG
 
 % upgrade(C, M) is true if M are materials for upgrading to career C
 upgrade(career(knight), [material(type(magic),4), material(type(shield),8), material(type(attack),8)]).
@@ -6,6 +5,7 @@ upgrade(career(fighter), [material(type(magic),4), material(type(shield),4), mat
 upgrade(career(mage), [material(type(magic),14), material(type(shield),2), material(type(attack),4)]).
 
 
+% material_for_upgrade(C, M) is true if M is a material of specific type for upgrading to career C
 material_for_upgrade(career(knight), material(type(magic),4)).
 material_for_upgrade(career(knight), material(type(shield),8)).
 material_for_upgrade(career(knight), material(type(attack),8)).
@@ -24,6 +24,32 @@ stage(3, [material(type(magic),1), material(type(shield),0), material(type(attac
 stage(4, [material(type(magic),1), material(type(shield),1), material(type(attack),2)]).
 stage(5, [material(type(magic),2), material(type(shield),2), material(type(attack),0)]).
 stage(6, [material(type(magic),3), material(type(shield),0), material(type(attack),1)]).
+
+
+% material_from_Stage(N, M) is true if M is a material of specific type earned from stage N
+material_from_Stage(1, material(type(magic),1)).
+material_from_Stage(1, material(type(shield),1)).
+material_from_Stage(1, material(type(attack),1)).
+
+material_from_Stage(2, material(type(magic),0)).
+material_from_Stage(2, material(type(shield),1)).
+material_from_Stage(2, material(type(attack),2)).
+
+material_from_Stage(3, material(type(magic),1)).
+material_from_Stage(3, material(type(shield),0)).
+material_from_Stage(3, material(type(attack),1)).
+
+material_from_Stage(4, material(type(magic),1)).
+material_from_Stage(4, material(type(shield),1)).
+material_from_Stage(4, material(type(attack),2)).
+
+material_from_Stage(5, material(type(magic),2)).
+material_from_Stage(5, material(type(shield),2)).
+material_from_Stage(5, material(type(attack),0)).
+
+material_from_Stage(6, material(type(magic),3)).
+material_from_Stage(6, material(type(shield),0)).
+material_from_Stage(6, material(type(attack),1)).
 
 
 % material(T, N) is true if N >= 0 and T is a valid material type;
