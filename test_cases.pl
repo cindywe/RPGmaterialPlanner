@@ -30,3 +30,16 @@
 % |: 8
 % You still need: 
 % Ans = "attack = - ".
+
+
+% ?- ask(Ans).
+% Ask your question: 
+% |: What materials can be earned from stage 6?
+% Ans = ["magic = 3", "shield = 0", "attack = 1"].
+
+
+
+% ?- ask(Ans).
+% Ask your question: 
+% |: How many attack can be earned from stage 3?
+% Ans = 1.

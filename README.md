@@ -2,10 +2,10 @@
 
 To ask a question: 
 * swipl 
-* ?- [cogsplanner]. 
+* ?- [planner].
 * ?- ask(Ans).
 
-
+<br/>
 Questions user can ask:
 1. What materials required for upgrading to <career from the list below>?
 <br />E.g. What materials required for upgrading to fighter?
@@ -22,6 +22,14 @@ Questions user can ask:
 <br />E.g. How many attack I still need for upgrading to knight?
 
 
+5. What materials can be earned from stage <an integer from 1 to 6>?
+<br/> E.g. What materials can be earned from stage 6?
+
+
+6. How many <material type from the list below> can be earned from stage <an integer from 1 to 6>?
+<br/>E.g. How many attack can be earned from stage 3?
+
+<br/>
 List of career:
 * fighter
 * mage
@@ -31,3 +39,4 @@ List of material type:
 * magic
 * shield
 * attack
+
