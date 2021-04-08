@@ -26,17 +26,23 @@ question(['How',many,Y,'I',still,need,for,upgrading,to,X,?], Ans) :-
 	check_material_diff(Y, X, Ans).
 
 
+question(['What',materials,can,be,earned,from,stage,X,?], Ans) :-
+	list_materials_earned_from_a_stage(X, Ans).
+
+
+question(['How',many,Y,can,be,earned,from,stage,X,?], Ans) :-
+	material_from_Stage(X, material(type(Y), Ans)).
 
 
 % ------------ LOGICS ------------- %
 
-% requires_for_upgrading(C, MList) is true if materials M, S, A are required for upgrading to career C.
-requires_for_upgrading(C, MList) :-
+% requires_for_upgrading(C, Ans) is true if materials M, S, A are required for upgrading to career C.
+requires_for_upgrading(C, Ans) :-
 	upgrade(career(C), [material(type(magic), Magic), material(type(shield),Shield), material(type(attack),Attack)]),
 	string_concat('magic = ', Magic, M),
 	string_concat('shield = ', Shield, S),
 	string_concat('attack = ', Attack, A),
-	MList = [M, S, A].
+	Ans = [M, S, A].
 
 
 check_can_upgrade(X, Ans) :-
@@ -88,6 +94,13 @@ compute_single_material_diff(C, MaterialType, [MaterialOwned], Ans) :-
 	Diff is MagicRequired - MaterialOwned,
 	getNumRequiredMaterial(Diff, MaterialType, Ans).
 
+
+list_materials_earned_from_a_stage(Stage, Ans) :-
+	stage(Stage, [material(type(magic),Magic), material(type(shield),Shield), material(type(attack),Attack)]),
+	string_concat('magic = ', Magic, M),
+	string_concat('shield = ', Shield, S),
+	string_concat('attack = ', Attack, A),
+	Ans = [M, S, A].
 
 
 % ----------- HELPER METHODS ---------- %
