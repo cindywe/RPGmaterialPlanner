@@ -29,7 +29,7 @@ Questions user can ask:
 6. How many <material type from the list below> can be earned from stage <an integer from 1 to 6>?
 <br/>E.g. How many attack can be earned from stage 3?
 
-<br/>
+
 List of career:
 * fighter
 * mage
