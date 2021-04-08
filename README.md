@@ -30,13 +30,7 @@ Questions user can ask:
 <br/>E.g. How many attack can be earned from stage 3?
 
 
-List of career:
-* fighter
-* mage
-* knight
+List of career: fighter, mage, knight
 
-List of material type:
-* magic
-* shield
-* attack
+List of material type: magic, shield, attack
 
