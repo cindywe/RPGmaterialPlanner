@@ -5,8 +5,9 @@ To ask a question:
 * ?- [planner].
 * ?- ask(Ans).
 
-<br/>
+
 ### Questions user can ask:
+<br/>
 1. What materials required for upgrading to <career from the list below>?
 <br />E.g. What materials required for upgrading to fighter?
 
