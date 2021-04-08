@@ -6,7 +6,7 @@ To ask a question:
 * ?- ask(Ans).
 
 <br/>
-###Questions user can ask:
+### Questions user can ask:
 1. What materials required for upgrading to <career from the list below>?
 <br />E.g. What materials required for upgrading to fighter?
 
@@ -30,9 +30,9 @@ To ask a question:
 <br/>E.g. How many attack can be earned from stage 3?
 
 
-###List of career: 
+### List of career: 
 fighter, mage, knight
 
-###List of material type: 
+### List of material type: 
 magic, shield, attack
 
