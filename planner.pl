@@ -61,16 +61,8 @@ check_requires_for_upgrading(Career, Ans) :-
 
 % check_can_upgrade(Career, Ans) is true if Ans is a message indicating whether it is possible to upgrade to Career.
 check_can_upgrade(Career, Ans) :-
-    write("How many magic do you have?"), flush_output(current_output),
-    nl,
-    readln(M),
-    write("How many shield do you have?"), flush_output(current_output),
-    nl,
-    readln(S),
-    write("How many attack do you have?"), flush_output(current_output),
-    nl,
-    readln(A),
-    get_all_material_required(Career, M, S, A, Ans).
+    ask_num_materials_owned(Magic, Shield, Attack),
+    get_all_material_required(Career, Magic, Shield, Attack, Ans).
 
 
 % get_all_material_required(Career, MagicOwned, ShieldOwned, AttackOwned, Ans) is true if Ans is a message indicating 
@@ -114,15 +106,7 @@ list_materials_earned_from_a_stage(N, Ans) :-
 
 % check_num_of_times(N, Career, Ans) is true 
 check_num_of_times(N, Career, Ans) :-
-	write("How many magic do you have?"), flush_output(current_output),
-    nl,
-    readln(Magic),
-    write("How many shield do you have?"), flush_output(current_output),
-    nl,
-    readln(Shield),
-    write("How many attack do you have?"), flush_output(current_output),
-    nl,
-    readln(Attack),
+	ask_num_materials_owned(Magic, Shield, Attack),
     get_num_of_times(Career, N, Magic, Shield, Attack, Ans).
 
 
@@ -147,15 +131,7 @@ provide_suggestion(C) :-
 	write("What is the highest stage level you have cleared"), flush_output(current_output),
     nl,
     readln(Stage),
-	write("How many magic do you have?"), flush_output(current_output),
-    nl,
-    readln(Magic),
-    write("How many shield do you have?"), flush_output(current_output),
-    nl,
-    readln(Shield),
-    write("How many attack do you have?"), flush_output(current_output),
-    nl,
-    readln(Attack),
+	ask_num_materials_owned(Magic, Shield, Attack),
     suggest_stage_and_time(C, Stage, Magic, Shield, Attack).
 
 
@@ -253,6 +229,16 @@ max([Head | List], Max) :-
   (Head > MaxList -> Max = Head ; Max = MaxList ).
 
 
+ask_num_materials_owned(Magic, Shield, Attack) :-
+	write("How many magic do you have?"), flush_output(current_output),
+    nl,
+    readln(Magic),
+    write("How many shield do you have?"), flush_output(current_output),
+    nl,
+    readln(Shield),
+    write("How many attack do you have?"), flush_output(current_output),
+    nl,
+    readln(Attack).
 
 
 
