@@ -39,13 +39,13 @@ career(fighter).
 stage(1, [material(type(magic),1), material(type(shield),1), material(type(attack),1)]).
 stage(2, [material(type(magic),1), material(type(shield),1), material(type(attack),2)]).
 stage(3, [material(type(magic),1), material(type(shield),2), material(type(attack),1)]).
-stage(4, [material(type(magic),2), material(type(shield),1), material(type(attack),2)]).
-stage(5, [material(type(magic),2), material(type(shield),2), material(type(attack),2)]).
-stage(6, [material(type(magic),3), material(type(shield),2), material(type(attack),2)]).
+stage(4, [material(type(magic),2), material(type(shield),2), material(type(attack),2)]).
+stage(5, [material(type(magic),3), material(type(shield),3), material(type(attack),5)]).
+stage(6, [material(type(magic),4), material(type(shield),6), material(type(attack),4)]).
 
 
 % stage_time(N, T) is true if stage N takes T minutes to complete/clear
-stage_time(1, 0.5).
+stage_time(1, 1).
 stage_time(2, 1).
 stage_time(3, 2).
 stage_time(4, 2).
@@ -67,14 +67,14 @@ material_from_Stage(3, material(type(shield),2)).
 material_from_Stage(3, material(type(attack),1)).
 
 material_from_Stage(4, material(type(magic),2)).
-material_from_Stage(4, material(type(shield),1)).
+material_from_Stage(4, material(type(shield),2)).
 material_from_Stage(4, material(type(attack),2)).
 
-material_from_Stage(5, material(type(magic),2)).
-material_from_Stage(5, material(type(shield),2)).
-material_from_Stage(5, material(type(attack),2)).
+material_from_Stage(5, material(type(magic),3)).
+material_from_Stage(5, material(type(shield),3)).
+material_from_Stage(5, material(type(attack),5)).
 
-material_from_Stage(6, material(type(magic),3)).
-material_from_Stage(6, material(type(shield),2)).
-material_from_Stage(6, material(type(attack),2)).
+material_from_Stage(6, material(type(magic),4)).
+material_from_Stage(6, material(type(shield),6)).
+material_from_Stage(6, material(type(attack),4)).
 

@@ -43,6 +43,11 @@ question(['How',long,does,stage,Y,take,?], Ans) :-
 	string_concat(T, ' minute(s)', Ans).
 
 
+question(['How',can,'I',upgrade,to,X,?], Ans) :-
+    provide_suggestion(X).
+
+
+
 % ------------ LOGICS ------------- %
 
 % check_requires_for_upgrading(Career, Ans) is true if Ans are materials required for upgrading to Career.
@@ -121,6 +126,7 @@ check_num_of_times(N, Career, Ans) :-
     get_num_of_times(Career, N, Magic, Shield, Attack, Ans).
 
 
+
 % get_num_of_times(Career, N, Magic, Shield, Attack, Ans) is true if Ans is a message indicating 
 % the number of times user has to clear stage N to earn enough Magic, Shield, Attack
 get_num_of_times(Career, N, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
@@ -134,8 +140,52 @@ get_num_of_times(Career, N, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
 	string_concat('You have to clear it ', NumTimes, Temp),
 	string_concat(Temp, ' time(s). It will takes you ', Msg1),
 	string_concat(Msg1, TotalTime, Msg2),
-	string_concat(Msg2, ' minute(s) ', Ans)
+	string_concat(Msg2, ' min ', Ans)
 ).
+
+provide_suggestion(C) :-
+	write("What is the highest stage level you have cleared"), flush_output(current_output),
+    nl,
+    readln(Stage),
+	write("How many magic do you have?"), flush_output(current_output),
+    nl,
+    readln(Magic),
+    write("How many shield do you have?"), flush_output(current_output),
+    nl,
+    readln(Shield),
+    write("How many attack do you have?"), flush_output(current_output),
+    nl,
+    readln(Attack),
+    suggest_stage_and_time(C, Stage, Magic, Shield, Attack).
+
+
+suggest_stage_and_time(Career, CurrentStage, MagicOwned, ShieldOwned, AttackOwned) :-
+	get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff),
+(   (MagicDiff =< 0, ShieldDiff =< 0, AttackDiff =< 0) ->
+	string_concat('Congrat!!! You already have enough materials for upgrading to ', Career, Msg),
+	write(Msg)
+;
+    write("You can upgrade by one of the following ways: "),
+    nl,
+    get_eligible_stages(CurrentStage, [1,2,3,4,5,6], StagesList),
+    get_stages_and_times_tuples(Career, MagicDiff, ShieldDiff, AttackDiff, StagesList, Ans),
+    print_stages_and_times(Ans)
+).
+
+
+% print_stages_and_times(L) is true if L is a list of triples containing (stage, number of times, total duration for the stage)
+print_stages_and_times([]).
+print_stages_and_times([(S,N,D)|T]) :-
+	string_concat('Clear stage: ', S, Temp1),
+	string_concat(' => ', N, Temp2),
+	string_concat(Temp1, Temp2, Temp3),
+	string_concat(' times; total ', D, Temp4),
+	string_concat(Temp4, ' min', Temp5),
+	string_concat(Temp3, Temp5, Msg),
+	write(Msg),
+	nl,
+	print_stages_and_times(T).
+
 
 
 % ----------- HELPER METHODS ---------- %
@@ -178,16 +228,21 @@ calculate_num_times(N, MagicDiff, ShieldDiff, AttackDiff, NumTimes) :-
 % get_eligible_stages(Y, L, R) is true if R contains the stages from the L, such stage is less than or equal to Y or equal to Y + 1
 get_eligible_stages(_, [],[]).
 
-get_eligible_stages(Y, [X|T], [X|Result]) :- 
-	X =:= (Y + 1),
-	get_eligible_stages(Y, T, Result).
+get_eligible_stages(Y, [H|T], [H|Result]) :- 
+    (H =:= (Y + 1) ; (H =< Y)),
+    get_eligible_stages(Y, T, Result).
 
-get_eligible_stages(Y, [X|T], [X|Result]) :- 
-	X =< Y,
-	get_eligible_stages(Y, T, Result).
+get_eligible_stages(Y, [H|T], Result) :- 
+	H > (Y + 1),
+    get_eligible_stages(Y, T, Result).
 
-get_eligible_stages(Y, [H|T], Result) :-  
-	get_eligible_stages(Y, T, Result).
+
+get_stages_and_times_tuples(_, _, _, _, [],[]).
+get_stages_and_times_tuples(Career, MagicDiff, ShieldDiff, AttackDiff, [H|T], [(H,NumTimes,Duration)|Ans]) :-
+	calculate_num_times(H, MagicDiff, ShieldDiff, AttackDiff, NumTimes),
+	stage_time(H, TimeSpent),
+	Duration is NumTimes * TimeSpent,
+	get_stages_and_times_tuples(Career, MagicDiff, ShieldDiff, AttackDiff, T, Ans).
 
 
 % Reference: https://stackoverflow.com/questions/25838827/prolog-max-in-a-list
@@ -196,6 +251,11 @@ max([Max], Max).
 max([Head | List], Max) :-
   max(List, MaxList),
   (Head > MaxList -> Max = Head ; Max = MaxList ).
+
+
+
+
+
 
 
 

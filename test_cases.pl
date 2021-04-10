@@ -95,3 +95,39 @@
 % Ans = "4 minute(s)".
 
 
+% ?- ask(Ans).
+% Ask your question: 
+% |: How can I upgrade to mage?
+% What is the highest stage level you have cleared
+% |: 4
+% How many magic do you have?
+% |: 10
+% How many shield do you have?
+% |: 10
+% How many attack do you have?
+|% : 10
+% You can upgrade by one of the following ways: 
+% Clear stage: 1 => 4 times; total 4 min
+% Clear stage: 2 => 4 times; total 4 min
+% Clear stage: 3 => 4 times; total 8 min
+% Clear stage: 4 => 2 times; total 4 min
+% Clear stage: 5 => 2 times; total 6 min
+
+
+
+% ?- ask(Ans).
+% Ask your question: 
+% |: How can I upgrade to mage?
+% What is the highest stage level you have cleared
+% |: 20
+% How many magic do you have?
+% |: 20
+% How many shield do you have?
+% |: 20
+% How many attack do you have?
+% |: 20
+% Congrat!!! You already have enough materials for upgrading to mage
+
+
+
+

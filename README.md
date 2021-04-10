@@ -5,6 +5,7 @@ To ask a question:
 * ?- [planner].
 * ?- ask(Ans).
 
+---
 
 ### Questions user can ask:
 1. What materials required for upgrading to <career from the list below>?
@@ -37,7 +38,11 @@ To ask a question:
 8. How long does stage <an integer from 1 to 6> take?
 <br/>E.g. How long does stage 6 take?
 
+9. How can I upgrade to <career from the list below>?
+<br/>E.g. How can I upgrade to mage?
 
+
+---
 
 ### List of career: 
 fighter, mage, knight
