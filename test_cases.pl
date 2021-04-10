@@ -1,4 +1,5 @@
 % ----- Test cases -----
+
 % ?- ask(Ans).
 % Ask your question below: 
 % |: What materials required for upgrading to fighter?
@@ -10,6 +11,7 @@
 % |: How many attack required for upgrading to fighter?
 % Ans = 12.
 
+
 % ?- ask(Ans).
 % Ask your question: 
 % |: Can I upgrade to mage?
@@ -19,8 +21,28 @@
 % |: 3
 % How many attack do you have?
 % |: 6
-% You cannot upgrade now. Here are the numbers of materials you still require: 
-% Ans = ["magic = 9", "shield = - ", "attack = - "].
+% Sorry!!! You cannot upgrade now. You still need: 
+% Ans = ["magic = 9", "shield = - ", "attack = - "]
+
+
+% ?- ask(Ans).
+% Ask your question: 
+% |: Can I upgrade to mage?
+% How many magic do you have?
+% |: 15
+% How many shield do you have?
+% |: 6
+% How many attack do you have?
+% |: 7
+% Ans = "Congrat!!! You have enough materials for upgrading to mage"
+
+
+% ?- ask(Ans).
+% Ask your question: 
+% |: How many attack I still need for upgrading to knight?
+% How many attack do you have?
+% |: 2
+% Ans = "You still need: 6"
 
 
 % ?- ask(Ans).
@@ -28,8 +50,7 @@
 % |: How many attack I still need for upgrading to knight?
 % How many attack do you have?
 % |: 8
-% You still need: 
-% Ans = "attack = - ".
+% Ans = "You have enough attack"
 
 
 % ?- ask(Ans).
@@ -38,12 +59,10 @@
 % Ans = ["magic = 3", "shield = 0", "attack = 1"].
 
 
-
 % ?- ask(Ans).
 % Ask your question: 
 % |: How many attack can be earned from stage 3?
 % Ans = 1.
-
 
 
 % ?- ask(Ans).
@@ -55,16 +74,24 @@
 % |: 7
 % How many attack do you have?
 % |: 7
-% Ans = "You already have enough materials for upgrading to mage" .
+% Ans = "Congrat!!! You already have enough materials for upgrading to mage" .
+
 
 % ?- ask(Ans).
 % Ask your question: 
-% |: How many times do I have to clear stage 6 for upgrading to mage?
+% |: How many times do I have to clear stage 1 for upgrading to knight?
 % How many magic do you have?
-% |: 8
+% |: 4
 % How many shield do you have?
-% |: 5
+% |: 7
 % How many attack do you have?
-% |: 3
-% Number of times you have to clear stage 6
-% Ans = 2 .
+% |: 7
+% Ans = "You have to clear it 1 time(s). It will takes you 0.5 minute(s) " .
+
+
+% ?- ask(Ans).
+% Ask your question: 
+% |: How long does stage 6 take?
+% Ans = "4 minute(s)".
+
+

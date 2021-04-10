@@ -16,15 +16,18 @@ material_for_upgrade(career(mage), material(type(magic),14)).
 material_for_upgrade(career(mage), material(type(shield),2)).
 material_for_upgrade(career(mage), material(type(attack),4)).
 
+
 % material(T, N) is true if N >= 0 and T is a valid material type;
 material(T, N) :-
 	N >= 0,
 	type(T).
 
+
 % type(T) is true when T is a valid material type
 type(magic).
 type(shield).
 type(attack).
+
 
 % career(C) is true when C is a valid career
 career(knight).
@@ -40,13 +43,14 @@ stage(4, [material(type(magic),2), material(type(shield),1), material(type(attac
 stage(5, [material(type(magic),2), material(type(shield),2), material(type(attack),2)]).
 stage(6, [material(type(magic),3), material(type(shield),2), material(type(attack),2)]).
 
-% stage_time(N, T) is true if stage N takes T seconds to complete
-stage_time(1, 30).
-stage_time(2, 60).
-stage_time(3, 120).
-stage_time(4, 120).
-stage_time(5, 180).
-stage_time(6, 240).
+
+% stage_time(N, T) is true if stage N takes T minutes to complete/clear
+stage_time(1, 0.5).
+stage_time(2, 1).
+stage_time(3, 2).
+stage_time(4, 2).
+stage_time(5, 3).
+stage_time(6, 4).
 
 
 % material_from_Stage(N, M) is true if M is a material of specific type earned from stage N
@@ -74,10 +78,3 @@ material_from_Stage(6, material(type(magic),3)).
 material_from_Stage(6, material(type(shield),2)).
 material_from_Stage(6, material(type(attack),2)).
 
-
-
-
-
-% todo
-myconstraint(time).
-myconstraint(difficulties).

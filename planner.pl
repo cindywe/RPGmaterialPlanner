@@ -6,10 +6,10 @@ ask(Ans) :-
     nl,
     readln(Q),
     question(Q, Ans).
-
     
 
 % ------------ QUESTIONS ------------- %
+
 question(['What',materials,required,for,upgrading,to,X,?], Ans) :-
 	check_requires_for_upgrading(X, Ans).
 	
@@ -37,22 +37,24 @@ question(['How',many,Y,can,be,earned,from,stage,X,?], Ans) :-
 question(['How',many,times,do,'I',have,to,clear,stage,Y,for,upgrading,to,X,?], Ans) :-
 	check_num_of_times(Y, X, Ans).
 
-% IN PROGRESS
-question(['How',can,'I',upgrade,to,X,?], Ans) :-
-	provide_suggestion(X, Ans).
+
+question(['How',long,does,stage,Y,take,?], Ans) :-
+	stage_time(Y, T),
+	string_concat(T, ' minute(s)', Ans).
 
 
 % ------------ LOGICS ------------- %
 
-% check_requires_for_upgrading(C, Ans) is true if materials M, S, A are required for upgrading to career C.
-check_requires_for_upgrading(C, Ans) :-
-	upgrade(career(C), [material(type(magic), Magic), material(type(shield),Shield), material(type(attack),Attack)]),
+% check_requires_for_upgrading(Career, Ans) is true if Ans are materials required for upgrading to Career.
+check_requires_for_upgrading(Career, Ans) :-
+	upgrade(career(Career), [material(type(magic), Magic), material(type(shield),Shield), material(type(attack),Attack)]),
 	string_concat('magic = ', Magic, M),
 	string_concat('shield = ', Shield, S),
 	string_concat('attack = ', Attack, A),
 	Ans = [M, S, A].
 
 
+% check_can_upgrade(Career, Ans) is true if Ans is a message indicating whether it is possible to upgrade to Career.
 check_can_upgrade(Career, Ans) :-
     write("How many magic do you have?"), flush_output(current_output),
     nl,
@@ -66,13 +68,11 @@ check_can_upgrade(Career, Ans) :-
     get_all_material_required(Career, M, S, A, Ans).
 
 
+% get_all_material_required(Career, MagicOwned, ShieldOwned, AttackOwned, Ans) is true if Ans is a message indicating 
+% whether it is possible to upgrade to Career with MagicOwned, ShieldOwned and AttackOwned
 get_all_material_required(Career, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
 	get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff),
-	generate_upgrade_check_msg(Career, MagicDiff, ShieldDiff, AttackDiff, Ans).	
-
-
-generate_upgrade_check_msg(Career, MagicDiff, ShieldDiff, AttackDiff, Ans) :- 
-(   (MagicDiff =< 0, ShieldDiff =< 0, AttackDiff =< 0) ->
+	(   (MagicDiff =< 0, ShieldDiff =< 0, AttackDiff =< 0) ->
 	string_concat('Congrat!!! You have enough materials for upgrading to ', Career, Ans)
 ;
     write('Sorry!!! You cannot upgrade now. You still need: '),
@@ -83,17 +83,14 @@ generate_upgrade_check_msg(Career, MagicDiff, ShieldDiff, AttackDiff, Ans) :-
 ).
 
 
-check_single_material_required(Y, X, Ans) :-
-	string_concat('How many ', Y, Temp),
+% check_single_material_required(MaterialType, Career, Ans) is true if Ans is a message indicating the number of MaterialType required for upgrading to Career 
+check_single_material_required(MaterialType, Career, Ans) :-
+	string_concat('How many ', MaterialType, Temp),
 	string_concat(Temp, ' do you have?', Msg),
 	write(Msg), flush_output(current_output),
 	nl,
     readln(N),
-    get_single_material_diff(X, Y, [N], Ans).
-
-
-get_single_material_diff(C, MaterialType, [MaterialOwned], Ans) :-
-	calculate_material_diff(C, MaterialType, MaterialOwned, Diff),
+    calculate_material_diff(Career, MaterialType, N, Diff),
 	(   Diff > 0 ->
 		string_concat('You still need: ', Diff, Ans)
 	;
@@ -101,15 +98,17 @@ get_single_material_diff(C, MaterialType, [MaterialOwned], Ans) :-
 	).
 
 
-list_materials_earned_from_a_stage(Stage, Ans) :-
-	stage(Stage, [material(type(magic),Magic), material(type(shield),Shield), material(type(attack),Attack)]),
+% list_materials_earned_from_a_stage(N, Ans) is true if Ans is a list of materials can be earned from stage N
+list_materials_earned_from_a_stage(N, Ans) :-
+	stage(N, [material(type(magic),Magic), material(type(shield),Shield), material(type(attack),Attack)]),
 	string_concat('magic = ', Magic, M),
 	string_concat('shield = ', Shield, S),
 	string_concat('attack = ', Attack, A),
 	Ans = [M, S, A].
 
 
-check_num_of_times(Stage, Career, Ans) :-
+% check_num_of_times(N, Career, Ans) is true 
+check_num_of_times(N, Career, Ans) :-
 	write("How many magic do you have?"), flush_output(current_output),
     nl,
     readln(Magic),
@@ -119,55 +118,29 @@ check_num_of_times(Stage, Career, Ans) :-
     write("How many attack do you have?"), flush_output(current_output),
     nl,
     readln(Attack),
-    get_num_of_times(Career, Stage, Magic, Shield, Attack, Ans).
+    get_num_of_times(Career, N, Magic, Shield, Attack, Ans).
 
 
-% get_num_of_times(Career, Stage, Magic, Shield, Attack, Ans) is true if Ans is the number of times user has to clear stage S to earn enough Magic, Shield, Attack
-get_num_of_times(Career, Stage, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
-	stage(Stage, [material(type(magic), MagicEarned), material(type(shield), ShieldEarned), material(type(attack), AttackEarned)]),
-	get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff),
-(   (MagicDiff =< 0, ShieldDiff =< 0, AttackDiff =< 0) ->
-	string_concat('You already have enough materials for upgrading to ', Career, Ans)
-;
-    X is ceiling(MagicDiff/MagicEarned),
-	Y is ceiling(ShieldDiff/ShieldEarned),
-	Z is ceiling(AttackDiff/AttackEarned),
-	string_concat('Number of times you have to clear stage ', Stage, Msg),
-	write(Msg),
-	max([X, Y, Z], Ans)
-).
-
-% IN PROGRESS
-provide_suggestion(C, Ans) :-
-	write("What is the highest stage level you have cleared"), flush_output(current_output),
-    nl,
-    readln(Stage),
-	write("How many magic do you have?"), flush_output(current_output),
-    nl,
-    readln(Magic),
-    write("How many shield do you have?"), flush_output(current_output),
-    nl,
-    readln(Shield),
-    write("How many attack do you have?"), flush_output(current_output),
-    nl,
-    readln(Attack),
-    suggest_stage_and_time(C, Stage, Magic, Shield, Attack, Ans).
-
-
-% IN PROGRESS
-suggest_stage_and_time(Career, CurrentStage, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
+% get_num_of_times(Career, N, Magic, Shield, Attack, Ans) is true if Ans is a message indicating 
+% the number of times user has to clear stage N to earn enough Magic, Shield, Attack
+get_num_of_times(Career, N, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
 	get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff),
 (   (MagicDiff =< 0, ShieldDiff =< 0, AttackDiff =< 0) ->
 	string_concat('Congrat!!! You already have enough materials for upgrading to ', Career, Ans)
 ;
-    write("Here are ways for you to upgrade: "),
-    get_eligible_stages(CurrentStage, [1,2,3,4,5,6], Ans)
+	calculate_num_times(N, MagicDiff, ShieldDiff, AttackDiff, NumTimes),
+	stage_time(N, TimeSpent),
+	TotalTime is NumTimes * TimeSpent,
+	string_concat('You have to clear it ', NumTimes, Temp),
+	string_concat(Temp, ' time(s). It will takes you ', Msg1),
+	string_concat(Msg1, TotalTime, Msg2),
+	string_concat(Msg2, ' minute(s) ', Ans)
 ).
-
 
 
 % ----------- HELPER METHODS ---------- %
 
+% generate_required_material_string(Num, Material, Ans) is true if Ans is a formatted string indicating number of material
 generate_required_material_string(Num, Material, Ans) :-
 (   Num > 0 ->
 	string_concat(Material, ' = ', Temp),
@@ -177,16 +150,29 @@ generate_required_material_string(Num, Material, Ans) :-
 ).
 
 
+% get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff) is true 
+% if MagicDiff, ShieldDiff, AttackDiff are differences between material required for upgrading to Career and materials owned.
 get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff) :-
 	calculate_material_diff(Career, magic, MagicOwned, MagicDiff),
 	calculate_material_diff(Career, shield, ShieldOwned, ShieldDiff),
 	calculate_material_diff(Career, attack, AttackOwned, AttackDiff).
 
 
+% calculate_material_diff(Career, MaterialType, MaterialOwned, Diff) is true 
+% if Diff is a difference between material required for upgrading to Career and material owned for specific MaterialType
 calculate_material_diff(Career, MaterialType, MaterialOwned, Diff) :-
 	material_for_upgrade(career(Career), material(type(MaterialType), MagicRequired)),
 	Diff is MagicRequired - MaterialOwned.
 
+
+% calculate_num_times(N, MagicDiff, ShieldDiff, AttackDiff, NumTimes) is true 
+% if NumTimes is number of times to clear stage N in order to earn target number of materials (MagicDiff, ShieldDiff, AttackDiff) 
+calculate_num_times(N, MagicDiff, ShieldDiff, AttackDiff, NumTimes) :-
+	stage(N, [material(type(magic), MagicEarned), material(type(shield), ShieldEarned), material(type(attack), AttackEarned)]),
+    X is ceiling(MagicDiff/MagicEarned),
+	Y is ceiling(ShieldDiff/ShieldEarned),
+	Z is ceiling(AttackDiff/AttackEarned),
+	max([X, Y, Z], NumTimes).
 
 
 % get_eligible_stages(Y, L, R) is true if R contains the stages from the L, such stage is less than or equal to Y or equal to Y + 1
@@ -203,13 +189,14 @@ get_eligible_stages(Y, [X|T], [X|Result]) :-
 get_eligible_stages(Y, [H|T], Result) :-  
 	get_eligible_stages(Y, T, Result).
 
-	
 
 % Reference: https://stackoverflow.com/questions/25838827/prolog-max-in-a-list
+% max(L, M) is true if M is the maximum in the list L
 max([Max], Max).
 max([Head | List], Max) :-
   max(List, MaxList),
   (Head > MaxList -> Max = Head ; Max = MaxList ).
+
 
 
 

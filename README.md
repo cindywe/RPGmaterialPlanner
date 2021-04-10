@@ -34,6 +34,11 @@ To ask a question:
 <br/>E.g. How many times do I have to clear stage 6 for upgrading to mage?
 
 
+8. How long does stage <an integer from 1 to 6> take?
+<br/>E.g. How long does stage 6 take?
+
+
+
 ### List of career: 
 fighter, mage, knight
 
