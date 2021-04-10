@@ -29,6 +29,9 @@ Questions user can ask:
 6. How many <material type from the list below> can be earned from stage <an integer from 1 to 6>?
 <br/>E.g. How many attack can be earned from stage 3?
 
+7. How many times do I have to clear stage <an integer from 1 to 6> for upgrading to <career from the list below>?
+<br/>E.g. How many times do I have to clear stage 6 for upgrading to mage?
+
 <br/>
 List of career:
 * fighter

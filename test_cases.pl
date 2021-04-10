@@ -43,3 +43,28 @@
 % Ask your question: 
 % |: How many attack can be earned from stage 3?
 % Ans = 1.
+
+
+
+% ?- ask(Ans).
+% Ask your question: 
+% |: How many times do I have to clear stage 6 for upgrading to mage?
+% How many magic do you have?
+% |: 15
+% How many shield do you have?
+% |: 7
+% How many attack do you have?
+% |: 7
+% Ans = "You already have enough materials for upgrading to mage" .
+
+% ?- ask(Ans).
+% Ask your question: 
+% |: How many times do I have to clear stage 6 for upgrading to mage?
+% How many magic do you have?
+% |: 8
+% How many shield do you have?
+% |: 5
+% How many attack do you have?
+% |: 3
+% Number of times you have to clear stage 6
+% Ans = 2 .

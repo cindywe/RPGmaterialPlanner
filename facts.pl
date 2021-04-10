@@ -16,42 +16,6 @@ material_for_upgrade(career(mage), material(type(magic),14)).
 material_for_upgrade(career(mage), material(type(shield),2)).
 material_for_upgrade(career(mage), material(type(attack),4)).
 
-
-% stage(N, M) is true if M are materials earned from stage N
-stage(1, [material(type(magic),1), material(type(shield),1), material(type(attack),1)]).
-stage(2, [material(type(magic),0), material(type(shield),1), material(type(attack),2)]).
-stage(3, [material(type(magic),1), material(type(shield),0), material(type(attack),1)]).
-stage(4, [material(type(magic),1), material(type(shield),1), material(type(attack),2)]).
-stage(5, [material(type(magic),2), material(type(shield),2), material(type(attack),0)]).
-stage(6, [material(type(magic),3), material(type(shield),0), material(type(attack),1)]).
-
-
-% material_from_Stage(N, M) is true if M is a material of specific type earned from stage N
-material_from_Stage(1, material(type(magic),1)).
-material_from_Stage(1, material(type(shield),1)).
-material_from_Stage(1, material(type(attack),1)).
-
-material_from_Stage(2, material(type(magic),0)).
-material_from_Stage(2, material(type(shield),1)).
-material_from_Stage(2, material(type(attack),2)).
-
-material_from_Stage(3, material(type(magic),1)).
-material_from_Stage(3, material(type(shield),0)).
-material_from_Stage(3, material(type(attack),1)).
-
-material_from_Stage(4, material(type(magic),1)).
-material_from_Stage(4, material(type(shield),1)).
-material_from_Stage(4, material(type(attack),2)).
-
-material_from_Stage(5, material(type(magic),2)).
-material_from_Stage(5, material(type(shield),2)).
-material_from_Stage(5, material(type(attack),0)).
-
-material_from_Stage(6, material(type(magic),3)).
-material_from_Stage(6, material(type(shield),0)).
-material_from_Stage(6, material(type(attack),1)).
-
-
 % material(T, N) is true if N >= 0 and T is a valid material type;
 material(T, N) :-
 	N >= 0,
@@ -66,6 +30,49 @@ type(attack).
 career(knight).
 career(mage).
 career(fighter).
+
+
+% stage(N, M) is true if M are materials earned from stage N
+stage(1, [material(type(magic),1), material(type(shield),1), material(type(attack),1)]).
+stage(2, [material(type(magic),1), material(type(shield),1), material(type(attack),2)]).
+stage(3, [material(type(magic),1), material(type(shield),2), material(type(attack),1)]).
+stage(4, [material(type(magic),2), material(type(shield),1), material(type(attack),2)]).
+stage(5, [material(type(magic),2), material(type(shield),2), material(type(attack),2)]).
+stage(6, [material(type(magic),3), material(type(shield),2), material(type(attack),2)]).
+
+% stage_time(N, T) is true if stage N takes T seconds to complete
+stage_time(1, 30).
+stage_time(2, 60).
+stage_time(3, 120).
+stage_time(4, 120).
+stage_time(5, 180).
+stage_time(6, 240).
+
+
+% material_from_Stage(N, M) is true if M is a material of specific type earned from stage N
+material_from_Stage(1, material(type(magic),1)).
+material_from_Stage(1, material(type(shield),1)).
+material_from_Stage(1, material(type(attack),1)).
+
+material_from_Stage(2, material(type(magic),1)).
+material_from_Stage(2, material(type(shield),1)).
+material_from_Stage(2, material(type(attack),2)).
+
+material_from_Stage(3, material(type(magic),1)).
+material_from_Stage(3, material(type(shield),2)).
+material_from_Stage(3, material(type(attack),1)).
+
+material_from_Stage(4, material(type(magic),2)).
+material_from_Stage(4, material(type(shield),1)).
+material_from_Stage(4, material(type(attack),2)).
+
+material_from_Stage(5, material(type(magic),2)).
+material_from_Stage(5, material(type(shield),2)).
+material_from_Stage(5, material(type(attack),2)).
+
+material_from_Stage(6, material(type(magic),3)).
+material_from_Stage(6, material(type(shield),2)).
+material_from_Stage(6, material(type(attack),2)).
 
 
 
