@@ -1,10 +1,13 @@
 # RPGmaterialPlanner
-
-To ask a question: 
 * swipl 
 * ?- [planner].
+* start.
+
+To ask a question: 
 * ?- ask(Ans).
 
+To view info: 
+* ?- info.
 ---
 
 ### Questions user can ask:
