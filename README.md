@@ -41,6 +41,8 @@ To ask a question:
 9. How can I upgrade to [career from the list below]?
 <br/>E.g. How can I upgrade to mage?
 
+10. What is the best way for me to upgrade to [career from the list below]?
+<br/>E.g. What is the best way for me to upgrade to fighter?
 
 ---
 
