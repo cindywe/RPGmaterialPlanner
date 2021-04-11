@@ -47,6 +47,10 @@ question(['How',can,'I',upgrade,to,X,?], Ans) :-
     provide_suggestion(X).
 
 
+question(['What',is,the,best,way,for,me,to,upgrade,to,X,?], Ans) :-
+    provide_best_option(X).
+
+
 
 % ------------ LOGICS ------------- %
 
@@ -135,6 +139,8 @@ provide_suggestion(C) :-
     get_all_options(C, Stage, Magic, Shield, Attack).
 
 
+% get_all_options(Career, CurrentStage, MagicOwned, ShieldOwned, AttackOwned)
+% gets all options for the user to upgrade to Career
 get_all_options(Career, CurrentStage, MagicOwned, ShieldOwned, AttackOwned) :-
 	get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff),
 (   (MagicDiff =< 0, ShieldDiff =< 0, AttackDiff =< 0) ->
@@ -145,24 +151,42 @@ get_all_options(Career, CurrentStage, MagicOwned, ShieldOwned, AttackOwned) :-
     nl,
     get_eligible_stages(CurrentStage, [1,2,3,4,5,6], StagesList),
     get_stages_and_times_tuples(Career, MagicDiff, ShieldDiff, AttackDiff, StagesList, Ans),
-    print_stages_and_times(Ans)
+    print_all_options(Ans)
 ).
 
-
-% print_stages_and_times(L) is true if L is a list of triples containing (stage, number of times, total duration for the stage)
-print_stages_and_times([]).
-print_stages_and_times([(S,N,D)|T]) :-
-	string_concat('Clear stage: ', S, Temp1),
-	string_concat(' => ', N, Temp2),
-	string_concat(Temp1, Temp2, Temp3),
-	string_concat(' times; total ', D, Temp4),
-	string_concat(Temp4, ' min', Temp5),
-	string_concat(Temp3, Temp5, Msg),
+% print_all_options(L) is true if L is a list of triples containing
+% (stage, number of times, total duration for the stage). It will print all elements in L in formatted strings.
+print_all_options([]).
+print_all_options([H|T]) :-
+	generate_stage_time_duration_string(H, Msg),
 	write(Msg),
 	nl,
-	print_stages_and_times(T).
+	print_all_options(T).
 
 
+provide_best_option(C) :-
+    write("What is the highest stage level you have cleared? "), flush_output(current_output),
+    nl,
+    readln(Stage),
+    ask_num_materials_owned(Magic, Shield, Attack),
+    get_best_option(C, Stage, Magic, Shield, Attack).
+
+% get_best_option(Career, CurrentStage, MagicOwned, ShieldOwned, AttackOwned)
+% gets the best option (takes minimum duration) for the user to upgrade to Career
+get_best_option(Career, CurrentStage, MagicOwned, ShieldOwned, AttackOwned) :-
+    get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff),
+(   (MagicDiff =< 0, ShieldDiff =< 0, AttackDiff =< 0) ->
+    string_concat('Congrat!!! You already have enough materials for upgrading to ', Career, Msg),
+    write(Msg)
+;
+    get_eligible_stages(CurrentStage, [1,2,3,4,5,6], StagesList),
+    get_stages_and_times_tuples(Career, MagicDiff, ShieldDiff, AttackDiff, StagesList, Triples),
+    min_duration(Triples, Best),
+    generate_stage_time_duration_string(Best, Msg),
+    write("Here is the best option for you: "),
+    nl,
+    write(Msg)
+).
 
 % ----------- HELPER METHODS ---------- %
 
@@ -175,6 +199,15 @@ generate_required_material_string(Num, Material, Ans) :-
     string_concat(Material, ' = - ', Ans)
 ).
 
+% generate_stage_time_duration_string(X, Ans) is true if X is a triple of (Stage, Times, Duration)
+% and Ans is a formatted string containing Times and Duration for the Stage
+generate_stage_time_duration_string((Stage, Times, Duration), Ans) :-
+    string_concat('Clear stage: ', Stage, Temp1),
+    string_concat(' => ', Times, Temp2),
+    string_concat(Temp1, Temp2, Temp3),
+    string_concat(' times; total ', Duration, Temp4),
+    string_concat(Temp4, ' min', Temp5),
+    string_concat(Temp3, Temp5, Ans).
 
 % get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff) is true
 % if MagicDiff, ShieldDiff, AttackDiff are differences between material required for upgrading to Career and materials owned.
@@ -213,6 +246,9 @@ get_eligible_stages(Y, [H|T], Result) :-
     get_eligible_stages(Y, T, Result).
 
 
+% get_stages_and_times_tuples(Career, MagicDiff, ShieldDiff, AttackDiff, StagesList, Ans) is true if Ans is a list of
+% triples (Stage, NumTimes, Duration) that can provide number of materials (stated in MagicDiff, ShieldDiff, AttackDiff)
+% for upgrading to Career
 get_stages_and_times_tuples(_, _, _, _, [],[]).
 get_stages_and_times_tuples(Career, MagicDiff, ShieldDiff, AttackDiff, [H|T], [(H,NumTimes,Duration)|Ans]) :-
 	calculate_num_times(H, MagicDiff, ShieldDiff, AttackDiff, NumTimes),
@@ -221,6 +257,7 @@ get_stages_and_times_tuples(Career, MagicDiff, ShieldDiff, AttackDiff, [H|T], [(
 	get_stages_and_times_tuples(Career, MagicDiff, ShieldDiff, AttackDiff, T, Ans).
 
 
+% ask_num_materials_owned(Magic, Shield, Attack) asks for number of Magic, Shield, Attack the user owns
 ask_num_materials_owned(Magic, Shield, Attack) :-
 	write("How many magic do you have?"), flush_output(current_output),
     nl,
@@ -241,8 +278,12 @@ max([Head | List], Max) :-
   (Head > MaxList -> Max = Head ; Max = MaxList ).
 
 
-
-
+% min_duration(Triples, Min) is true if Triples is a list of (Stage, Times, Duration) and
+% Min is the triple with minimum Duration
+min_duration([Min], Min).
+min_duration([(Stage1,Times1,Duration1) | List], Min) :-
+  min_duration(List, (Stage2,Times2,Duration2)),
+  (Duration1 =< Duration2 -> Min = (Stage1,Times1,Duration1) ; Min = (Stage2,Times2,Duration2) ).
 
 
 

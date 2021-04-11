@@ -130,4 +130,19 @@
 
 
 
+% ?- ask(Ans).
+% Ask your question: 
+% |: What is the best way for me to upgrade to mage?
+% What is the highest stage level you have cleared? 
+% |: 4
+% How many magic do you have?
+% |: 10
+% How many shield do you have?
+% |: 10
+% How many attack do you have?
+% |: 10
+% Here is the best option for you: 
+% Clear stage: 1 => 4 times; total 4 min
+
+
 
