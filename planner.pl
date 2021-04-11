@@ -1,7 +1,13 @@
 :- include("facts.pl").
 :- include("info.pl").
 
-start :- print_info().
+start :-
+    write('Welcome to RPG Material Planner!!!'),
+    nl,
+    write('- To ask questions: ask(Ans).'),
+    nl,
+    write('- To view info: info. '),
+    nl.
 
 ask(Ans) :-
     write("Ask your question: "), flush_output(current_output),

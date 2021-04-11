@@ -1,6 +1,4 @@
-print_info() :-
-    write('Welcome to RPG Material Planner!!!'),
-    nl,
+info :-
     write('Here are questions you can ask: '),
     nl,
     write('- What materials required for upgrading to [career from the list below]?'),
@@ -35,7 +33,7 @@ print_info() :-
     nl,
     write('COMMANDS: '),
     nl,
-    write('- Ask questions: ask(Ans).'),
+    write('- To ask questions: ask(Ans).'),
     nl,
-    write('- Print info: print_info(). '),
+    write('- To view info: info. '),
     nl.
