@@ -6,13 +6,13 @@ ask(Ans) :-
     nl,
     readln(Q),
     question(Q, Ans).
-    
+
 
 % ------------ QUESTIONS ------------- %
 
 question(['What',materials,required,for,upgrading,to,X,?], Ans) :-
 	check_requires_for_upgrading(X, Ans).
-	
+
 
 question(['How',many,Y,required,for,upgrading,to,X,?], Ans) :-
 	material_for_upgrade(career(X), material(type(Y), Ans)).
@@ -65,7 +65,7 @@ check_can_upgrade(Career, Ans) :-
     get_all_material_required(Career, Magic, Shield, Attack, Ans).
 
 
-% get_all_material_required(Career, MagicOwned, ShieldOwned, AttackOwned, Ans) is true if Ans is a message indicating 
+% get_all_material_required(Career, MagicOwned, ShieldOwned, AttackOwned, Ans) is true if Ans is a message indicating
 % whether it is possible to upgrade to Career with MagicOwned, ShieldOwned and AttackOwned
 get_all_material_required(Career, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
 	get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff),
@@ -80,7 +80,7 @@ get_all_material_required(Career, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
 ).
 
 
-% check_single_material_required(MaterialType, Career, Ans) is true if Ans is a message indicating the number of MaterialType required for upgrading to Career 
+% check_single_material_required(MaterialType, Career, Ans) is true if Ans is a message indicating the number of MaterialType required for upgrading to Career
 check_single_material_required(MaterialType, Career, Ans) :-
 	string_concat('How many ', MaterialType, Temp),
 	string_concat(Temp, ' do you have?', Msg),
@@ -104,14 +104,14 @@ list_materials_earned_from_a_stage(N, Ans) :-
 	Ans = [M, S, A].
 
 
-% check_num_of_times(N, Career, Ans) is true 
+% check_num_of_times(N, Career, Ans) is true
 check_num_of_times(N, Career, Ans) :-
 	ask_num_materials_owned(Magic, Shield, Attack),
     get_num_of_times(Career, N, Magic, Shield, Attack, Ans).
 
 
 
-% get_num_of_times(Career, N, Magic, Shield, Attack, Ans) is true if Ans is a message indicating 
+% get_num_of_times(Career, N, Magic, Shield, Attack, Ans) is true if Ans is a message indicating
 % the number of times user has to clear stage N to earn enough Magic, Shield, Attack
 get_num_of_times(Career, N, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
 	get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff),
@@ -128,14 +128,14 @@ get_num_of_times(Career, N, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
 ).
 
 provide_suggestion(C) :-
-	write("What is the highest stage level you have cleared"), flush_output(current_output),
+	write("What is the highest stage level you have cleared? "), flush_output(current_output),
     nl,
     readln(Stage),
 	ask_num_materials_owned(Magic, Shield, Attack),
-    suggest_stage_and_time(C, Stage, Magic, Shield, Attack).
+    get_all_options(C, Stage, Magic, Shield, Attack).
 
 
-suggest_stage_and_time(Career, CurrentStage, MagicOwned, ShieldOwned, AttackOwned) :-
+get_all_options(Career, CurrentStage, MagicOwned, ShieldOwned, AttackOwned) :-
 	get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff),
 (   (MagicDiff =< 0, ShieldDiff =< 0, AttackDiff =< 0) ->
 	string_concat('Congrat!!! You already have enough materials for upgrading to ', Career, Msg),
@@ -176,7 +176,7 @@ generate_required_material_string(Num, Material, Ans) :-
 ).
 
 
-% get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff) is true 
+% get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff) is true
 % if MagicDiff, ShieldDiff, AttackDiff are differences between material required for upgrading to Career and materials owned.
 get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff) :-
 	calculate_material_diff(Career, magic, MagicOwned, MagicDiff),
@@ -184,15 +184,15 @@ get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, 
 	calculate_material_diff(Career, attack, AttackOwned, AttackDiff).
 
 
-% calculate_material_diff(Career, MaterialType, MaterialOwned, Diff) is true 
+% calculate_material_diff(Career, MaterialType, MaterialOwned, Diff) is true
 % if Diff is a difference between material required for upgrading to Career and material owned for specific MaterialType
 calculate_material_diff(Career, MaterialType, MaterialOwned, Diff) :-
 	material_for_upgrade(career(Career), material(type(MaterialType), MagicRequired)),
 	Diff is MagicRequired - MaterialOwned.
 
 
-% calculate_num_times(N, MagicDiff, ShieldDiff, AttackDiff, NumTimes) is true 
-% if NumTimes is number of times to clear stage N in order to earn target number of materials (MagicDiff, ShieldDiff, AttackDiff) 
+% calculate_num_times(N, MagicDiff, ShieldDiff, AttackDiff, NumTimes) is true
+% if NumTimes is number of times to clear stage N in order to earn target number of materials (MagicDiff, ShieldDiff, AttackDiff)
 calculate_num_times(N, MagicDiff, ShieldDiff, AttackDiff, NumTimes) :-
 	stage(N, [material(type(magic), MagicEarned), material(type(shield), ShieldEarned), material(type(attack), AttackEarned)]),
     X is ceiling(MagicDiff/MagicEarned),
@@ -204,11 +204,11 @@ calculate_num_times(N, MagicDiff, ShieldDiff, AttackDiff, NumTimes) :-
 % get_eligible_stages(Y, L, R) is true if R contains the stages from the L, such stage is less than or equal to Y or equal to Y + 1
 get_eligible_stages(_, [],[]).
 
-get_eligible_stages(Y, [H|T], [H|Result]) :- 
+get_eligible_stages(Y, [H|T], [H|Result]) :-
     (H =:= (Y + 1) ; (H =< Y)),
     get_eligible_stages(Y, T, Result).
 
-get_eligible_stages(Y, [H|T], Result) :- 
+get_eligible_stages(Y, [H|T], Result) :-
 	H > (Y + 1),
     get_eligible_stages(Y, T, Result).
 
@@ -221,14 +221,6 @@ get_stages_and_times_tuples(Career, MagicDiff, ShieldDiff, AttackDiff, [H|T], [(
 	get_stages_and_times_tuples(Career, MagicDiff, ShieldDiff, AttackDiff, T, Ans).
 
 
-% Reference: https://stackoverflow.com/questions/25838827/prolog-max-in-a-list
-% max(L, M) is true if M is the maximum in the list L
-max([Max], Max).
-max([Head | List], Max) :-
-  max(List, MaxList),
-  (Head > MaxList -> Max = Head ; Max = MaxList ).
-
-
 ask_num_materials_owned(Magic, Shield, Attack) :-
 	write("How many magic do you have?"), flush_output(current_output),
     nl,
@@ -239,6 +231,15 @@ ask_num_materials_owned(Magic, Shield, Attack) :-
     write("How many attack do you have?"), flush_output(current_output),
     nl,
     readln(Attack).
+
+
+% Reference: https://stackoverflow.com/questions/25838827/prolog-max-in-a-list
+% max(L, M) is true if M is the maximum in the list L
+max([Max], Max).
+max([Head | List], Max) :-
+  max(List, MaxList),
+  (Head > MaxList -> Max = Head ; Max = MaxList ).
+
 
 
 
