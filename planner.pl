@@ -1,5 +1,7 @@
 :- include("facts.pl").
+:- include("info.pl").
 
+start :- print_info().
 
 ask(Ans) :-
     write("Ask your question: "), flush_output(current_output),
