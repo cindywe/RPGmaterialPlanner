@@ -51,11 +51,11 @@ question(['How',long,does,stage,Y,take,?], Ans) :-
 	string_concat(T, ' minute(s)', Ans).
 
 
-question(['How',can,'I',upgrade,to,X,?], Ans) :-
+question(['How',can,'I',upgrade,to,X,?], _) :-
     provide_suggestion(X).
 
 
-question(['What',is,the,best,way,for,me,to,upgrade,to,X,?], Ans) :-
+question(['What',is,the,best,way,for,me,to,upgrade,to,X,?], _) :-
     provide_best_option(X).
 
 
@@ -71,14 +71,15 @@ check_requires_for_upgrading(Career, Ans) :-
 	Ans = [M, S, A].
 
 
-% check_can_upgrade(Career, Ans) is true if Ans is a message indicating whether it is possible to upgrade to Career.
+% check_can_upgrade(Career, Ans) is true if Ans is a message indicating whether
+% user have enough materials to upgrade to Career
 check_can_upgrade(Career, Ans) :-
     ask_num_materials_owned(Magic, Shield, Attack),
     get_all_material_required(Career, Magic, Shield, Attack, Ans).
 
 
 % get_all_material_required(Career, MagicOwned, ShieldOwned, AttackOwned, Ans) is true if Ans is a message indicating
-% whether it is possible to upgrade to Career with MagicOwned, ShieldOwned and AttackOwned
+% whether user can upgrade to Career with MagicOwned, ShieldOwned and AttackOwned
 get_all_material_required(Career, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
 	get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff),
 	(   (MagicDiff =< 0, ShieldDiff =< 0, AttackDiff =< 0) ->
@@ -116,7 +117,8 @@ list_materials_earned_from_a_stage(N, Ans) :-
 	Ans = [M, S, A].
 
 
-% check_num_of_times(N, Career, Ans) is true
+% check_num_of_times(N, Career, Ans) is true if Ans indicates number of times
+% user has to clear stage N in order to upgrade to Career
 check_num_of_times(N, Career, Ans) :-
 	ask_num_materials_owned(Magic, Shield, Attack),
     get_num_of_times(Career, N, Magic, Shield, Attack, Ans).
@@ -139,12 +141,14 @@ get_num_of_times(Career, N, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
 	string_concat(Msg2, ' min ', Ans)
 ).
 
-provide_suggestion(C) :-
+% provide_suggestion(Career) takes user input and provides all possible stages that
+% users can complete in order to upgrading to Career
+provide_suggestion(Career) :-
 	write("What is the highest stage level you have cleared? "), flush_output(current_output),
     nl,
     readln(Stage),
 	ask_num_materials_owned(Magic, Shield, Attack),
-    get_all_options(C, Stage, Magic, Shield, Attack).
+    get_all_options(Career, Stage, Magic, Shield, Attack).
 
 
 % get_all_options(Career, CurrentStage, MagicOwned, ShieldOwned, AttackOwned)
@@ -171,13 +175,14 @@ print_all_options([H|T]) :-
 	nl,
 	print_all_options(T).
 
-
-provide_best_option(C) :-
+% provide_best_option(Career) takes user input and provide the stage that take minimum time
+% for users to clear in order to upgrading to Career
+provide_best_option(Career) :-
     write("What is the highest stage level you have cleared? "), flush_output(current_output),
     nl,
     readln(Stage),
     ask_num_materials_owned(Magic, Shield, Attack),
-    get_best_option(C, Stage, Magic, Shield, Attack).
+    get_best_option(Career, Stage, Magic, Shield, Attack).
 
 % get_best_option(Career, CurrentStage, MagicOwned, ShieldOwned, AttackOwned)
 % gets the best option (takes minimum duration) for the user to upgrade to Career
