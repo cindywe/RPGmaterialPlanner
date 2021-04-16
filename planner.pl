@@ -39,6 +39,7 @@ question(['What',materials,can,be,earned,from,stage,X,?], Ans) :-
 
 
 question(['How',many,Y,can,be,earned,from,stage,X,?], Ans) :-
+    validate_material_input(Y),
 	material_from_Stage(X, material(type(Y), Ans)).
 
 
@@ -64,6 +65,7 @@ question(['What',is,the,best,way,for,me,to,upgrade,to,X,?], _) :-
 
 % check_requires_for_upgrading(Career, Ans) is true if Ans are materials required for upgrading to Career.
 check_requires_for_upgrading(Career, Ans) :-
+	validate_career_input(Career),
 	upgrade(career(Career), [material(type(magic), Magic), material(type(shield),Shield), material(type(attack),Attack)]),
 	string_concat('magic = ', Magic, M),
 	string_concat('shield = ', Shield, S),
@@ -74,6 +76,7 @@ check_requires_for_upgrading(Career, Ans) :-
 % check_can_upgrade(Career, Ans) is true if Ans is a message indicating whether
 % user have enough materials to upgrade to Career
 check_can_upgrade(Career, Ans) :-
+	validate_career_input(Career),
     ask_num_materials_owned(Magic, Shield, Attack),
     get_all_material_required(Career, Magic, Shield, Attack, Ans).
 
@@ -81,6 +84,7 @@ check_can_upgrade(Career, Ans) :-
 % get_all_material_required(Career, MagicOwned, ShieldOwned, AttackOwned, Ans) is true if Ans is a message indicating
 % whether user can upgrade to Career with MagicOwned, ShieldOwned and AttackOwned
 get_all_material_required(Career, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
+	validate_career_input(Career),
 	get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff),
 	(   (MagicDiff =< 0, ShieldDiff =< 0, AttackDiff =< 0) ->
 	string_concat('Congrat!!! You have enough materials for upgrading to ', Career, Ans)
@@ -95,6 +99,8 @@ get_all_material_required(Career, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
 
 % check_single_material_required(MaterialType, Career, Ans) is true if Ans is a message indicating the number of MaterialType required for upgrading to Career
 check_single_material_required(MaterialType, Career, Ans) :-
+	validate_material_input(MaterialType),
+	validate_career_input(Career),
 	string_concat('How many ', MaterialType, Temp),
 	string_concat(Temp, ' do you have?', Msg),
 	write(Msg), flush_output(current_output),
@@ -120,6 +126,7 @@ list_materials_earned_from_a_stage(N, Ans) :-
 % check_num_of_times(N, Career, Ans) is true if Ans indicates number of times
 % user has to clear stage N in order to upgrade to Career
 check_num_of_times(N, Career, Ans) :-
+    validate_career_input(Career),
 	ask_num_materials_owned(Magic, Shield, Attack),
     get_num_of_times(Career, N, Magic, Shield, Attack, Ans).
 
@@ -128,6 +135,7 @@ check_num_of_times(N, Career, Ans) :-
 % get_num_of_times(Career, N, Magic, Shield, Attack, Ans) is true if Ans is a message indicating
 % the number of times user has to clear stage N to earn enough Magic, Shield, Attack
 get_num_of_times(Career, N, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
+	validate_career_input(Career),
 	get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff),
 (   (MagicDiff =< 0, ShieldDiff =< 0, AttackDiff =< 0) ->
 	string_concat('Congrat!!! You already have enough materials for upgrading to ', Career, Ans)
@@ -144,6 +152,7 @@ get_num_of_times(Career, N, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
 % provide_suggestion(Career) takes user input and provides all possible stages that
 % users can complete in order to upgrading to Career
 provide_suggestion(Career) :-
+    validate_career_input(Career),
 	write("What is the highest stage level you have cleared? "), flush_output(current_output),
     nl,
     readln(Stage),
@@ -178,6 +187,7 @@ print_all_options([H|T]) :-
 % provide_best_option(Career) takes user input and provide the stage that take minimum time
 % for users to clear in order to upgrading to Career
 provide_best_option(Career) :-
+	validate_career_input(Career),
     write("What is the highest stage level you have cleared? "), flush_output(current_output),
     nl,
     readln(Stage),
@@ -297,6 +307,18 @@ min_duration([Min], Min).
 min_duration([(Stage1,Times1,Duration1) | List], Min) :-
   min_duration(List, (Stage2,Times2,Duration2)),
   (Duration1 =< Duration2 -> Min = (Stage1,Times1,Duration1) ; Min = (Stage2,Times2,Duration2) ).
+
+% validate_career_input(Career) is true if it is a valid career
+validate_career_input(Career):-
+	(career(Career) ->
+     writeln('Career is valid');
+	write('Sorry, invalid input. Valid careers are knight, fighter, and maje.')).
+
+% validate_material_input(M) is true if it is a valid career
+validate_material_input(M):-
+	(type(M) ->
+     writeln('Material is valid');
+	write('Sorry, invalid input. Valid material types are magic, shield, and attack.')).
 
 
 
