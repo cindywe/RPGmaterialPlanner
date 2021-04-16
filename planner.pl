@@ -23,6 +23,8 @@ question(['What',materials,required,for,upgrading,to,X,?], Ans) :-
 
 
 question(['How',many,Y,required,for,upgrading,to,X,?], Ans) :-
+	validate_career_input(X),
+	validate_material_input(Y),
 	material_for_upgrade(career(X), material(type(Y), Ans)).
 
 
@@ -84,7 +86,6 @@ check_can_upgrade(Career, Ans) :-
 % get_all_material_required(Career, MagicOwned, ShieldOwned, AttackOwned, Ans) is true if Ans is a message indicating
 % whether user can upgrade to Career with MagicOwned, ShieldOwned and AttackOwned
 get_all_material_required(Career, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
-	validate_career_input(Career),
 	get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff),
 	(   (MagicDiff =< 0, ShieldDiff =< 0, AttackDiff =< 0) ->
 	string_concat('Congrat!!! You have enough materials for upgrading to ', Career, Ans)
@@ -135,7 +136,6 @@ check_num_of_times(N, Career, Ans) :-
 % get_num_of_times(Career, N, Magic, Shield, Attack, Ans) is true if Ans is a message indicating
 % the number of times user has to clear stage N to earn enough Magic, Shield, Attack
 get_num_of_times(Career, N, MagicOwned, ShieldOwned, AttackOwned, Ans) :-
-	validate_career_input(Career),
 	get_all_materials_diff(Career, MagicOwned, ShieldOwned, AttackOwned, MagicDiff, ShieldDiff, AttackDiff),
 (   (MagicDiff =< 0, ShieldDiff =< 0, AttackDiff =< 0) ->
 	string_concat('Congrat!!! You already have enough materials for upgrading to ', Career, Ans)
@@ -312,7 +312,7 @@ min_duration([(Stage1,Times1,Duration1) | List], Min) :-
 validate_career_input(Career):-
 	(career(Career) ->
      writeln('Career is valid');
-	writeln('Sorry, invalid input. Valid careers are knight, fighter, and maje.'),
+	writeln('Sorry, invalid input. Valid careers are knight, fighter, and mage.'),
 	false).
 
 % validate_material_input(M) is true if it is a valid career
