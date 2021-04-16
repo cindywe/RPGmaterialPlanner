@@ -312,7 +312,7 @@ min_duration([(Stage1,Times1,Duration1) | List], Min) :-
 validate_career_input(Career):-
 	(career(Career) ->
      writeln('Career is valid');
-	write('Sorry, invalid input. Valid careers are knight, fighter, and maje.')).
+	write('Sorry, invalid input. Valid careers are knight, fighter, and mage.')).
 
 % validate_material_input(M) is true if it is a valid career
 validate_material_input(M):-
