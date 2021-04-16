@@ -160,6 +160,8 @@ provide_suggestion(Career) :-
 	write("What is the highest stage level you have cleared? "), flush_output(current_output),
     nl,
     readln(Stage),
+    [N] = Stage,
+    validate_stage_input(N),
 	ask_num_materials_owned(Magic, Shield, Attack),
     get_all_options(Career, Stage, Magic, Shield, Attack).
 
@@ -195,7 +197,8 @@ provide_best_option(Career) :-
     write("What is the highest stage level you have cleared? "), flush_output(current_output),
     nl,
     readln(Stage),
-	validate_stage_input(Stage),
+    [N] = Stage,
+	validate_stage_input(N),
     ask_num_materials_owned(Magic, Shield, Attack),
     get_best_option(Career, Stage, Magic, Shield, Attack).
 
