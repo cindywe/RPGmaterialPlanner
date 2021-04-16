@@ -37,19 +37,23 @@ question(['How',many,Y,'I',still,need,for,upgrading,to,X,?], Ans) :-
 
 
 question(['What',materials,can,be,earned,from,stage,X,?], Ans) :-
+	validate_stage_input(X),
 	list_materials_earned_from_a_stage(X, Ans).
 
 
 question(['How',many,Y,can,be,earned,from,stage,X,?], Ans) :-
     validate_material_input(Y),
+	validate_stage_input(X),
 	material_from_Stage(X, material(type(Y), Ans)).
 
 
 question(['How',many,times,do,'I',have,to,clear,stage,Y,for,upgrading,to,X,?], Ans) :-
+	validate_stage_input(Y),
 	check_num_of_times(Y, X, Ans).
 
 
 question(['How',long,does,stage,Y,take,?], Ans) :-
+	validate_stage_input(Y),
 	stage_time(Y, T),
 	string_concat(T, ' minute(s)', Ans).
 
@@ -191,6 +195,7 @@ provide_best_option(Career) :-
     write("What is the highest stage level you have cleared? "), flush_output(current_output),
     nl,
     readln(Stage),
+	validate_stage_input(Stage),
     ask_num_materials_owned(Magic, Shield, Attack),
     get_best_option(Career, Stage, Magic, Shield, Attack).
 
@@ -315,9 +320,16 @@ validate_career_input(Career):-
 	writeln('Sorry, invalid input. Valid careers are knight, fighter, and mage.'),
 	false).
 
-% validate_material_input(M) is true if it is a valid career
+% validate_material_input(M) is true if it is a valid material type
 validate_material_input(M):-
 	(type(M) ->
      writeln('Material is valid');
 	 writeln('Sorry, invalid input. Valid material types are magic, shield, and attack.'),
+	 false).
+
+% validate_stage_input(M) is true if it is a valid stage [0-6]
+validate_stage_input(Stage):-
+	(member(Stage, [0,1,2,3,4,5,6])->
+     writeln('Stage is valid');
+	 writeln('Sorry, invalid input. Valid stages are [0-6].'),
 	 false).
